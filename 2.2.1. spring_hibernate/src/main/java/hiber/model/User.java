@@ -19,8 +19,9 @@ public class User {
    @Column(name = "email")
    private String email;
 
-   public User() {}
-   
+   public User() {
+   }
+
    public User(String firstName, String lastName, String email) {
       this.firstName = firstName;
       this.lastName = lastName;
@@ -58,14 +59,45 @@ public class User {
    public void setEmail(String email) {
       this.email = email;
    }
+
    public void setCar(Car car) {
       this.car = car;
    }
+
    public Car getCar() {
       return car;
    }
 
 
-   @OneToOne (cascade = CascadeType.ALL, mappedBy = "user")
+   @OneToOne(cascade = CascadeType.ALL, mappedBy = "user")
    private Car car;
+
+   @Override
+   public boolean equals(Object o) {
+      if (this == o) {
+         return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+         return false;
+      }
+      User user = (User) o;
+      return id == user.id
+              && (firstName == user.firstName
+              || (firstName != null && firstName.equals(user.getFirstName()))
+              && (lastName == user.lastName
+              || (lastName != null && lastName.equals(user.getLastName()))
+              && (email == user.email
+              || (email != null && email.equals(user.getEmail()))
+      )));
+   }
+
+   @Override
+   public int hashCode() {
+      int result = 31;
+      result = result * 17 + firstName.hashCode();
+      result = result * 17 + lastName.hashCode();
+      result = result * 17 + email.hashCode();
+      return result;
+
+   }
 }
